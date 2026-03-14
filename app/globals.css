@@ -27,16 +27,16 @@ body {
   font-family: var(--font-bowlby), Arial, sans-serif;
 }
 
-/* Vertical conveyor belt — scrolls downward, loops seamlessly */
-@keyframes conveyor-down {
+/* Vertical conveyor belt — scrolls upward, loops seamlessly */
+@keyframes conveyor-up {
   0% {
-    transform: translateY(-50%);
+    transform: translateY(0%);
   }
   100% {
-    transform: translateY(0%);
+    transform: translateY(-50%);
   }
 }
 
 .animate-conveyor-down {
-  animation: conveyor-down 60s linear infinite;
+  animation: conveyor-up 60s linear infinite;
 }
