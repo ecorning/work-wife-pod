@@ -68,7 +68,16 @@ export async function POST(request: Request) {
         return resend.emails.send({
           from: process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev",
           to: "advice@workwifepod.com",
-          subject: `New Submission from ${displayName}`,
+          subject: (() => {
+            const now = new Date();
+            const dd = String(now.getDate()).padStart(2, "0");
+            const mm = String(now.getMonth() + 1).padStart(2, "0");
+            const yy = String(now.getFullYear()).slice(-2);
+            const hh = String(now.getHours()).padStart(2, "0");
+            const min = String(now.getMinutes()).padStart(2, "0");
+            const lastInit = lastName ? ` ${lastName.charAt(0)}.` : "";
+            return `WW Submission - ${firstName || "Anonymous"}${lastInit} - ${dd}/${mm}/${yy} ${hh}:${min}`;
+          })(),
           html: `
             <h2>New Work Wife Pod Submission</h2>
             <table style="border-collapse: collapse; width: 100%; max-width: 600px;">
