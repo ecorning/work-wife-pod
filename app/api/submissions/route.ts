@@ -62,25 +62,28 @@ export async function POST(request: Request) {
 
     // Run email and sheets in parallel
     const results = await Promise.allSettled([
-      // A. Send email via Resend
-      getResendClient().emails.send({
-        from: process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev",
-        to: "advice@workwifepod.com",
-        subject: `New Submission from ${displayName}`,
-        html: `
-          <h2>New Work Wife Pod Submission</h2>
-          <table style="border-collapse: collapse; width: 100%; max-width: 600px;">
-            <tr><td style="padding: 8px; font-weight: bold; border-bottom: 1px solid #eee;">Name</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${firstName} ${lastName}</td></tr>
-            <tr><td style="padding: 8px; font-weight: bold; border-bottom: 1px solid #eee;">Email</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${email}</td></tr>
-            <tr><td style="padding: 8px; font-weight: bold; border-bottom: 1px solid #eee;">Phone</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${phone || "—"}</td></tr>
-            <tr><td style="padding: 8px; font-weight: bold; border-bottom: 1px solid #eee;">Age</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${age || "—"}</td></tr>
-            <tr><td style="padding: 8px; font-weight: bold; border-bottom: 1px solid #eee;">Gender</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${gender || "—"}</td></tr>
-            <tr><td style="padding: 8px; font-weight: bold; border-bottom: 1px solid #eee;">Industry</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${displayIndustry || "—"}</td></tr>
-          </table>
-          <h3 style="margin-top: 24px;">Question</h3>
-          <p style="background: #f9f9f9; padding: 16px; border-radius: 8px; white-space: pre-wrap;">${question}</p>
-        `,
-      }),
+      // A. Send email via Resend (wrapped in async so constructor errors are caught)
+      (async () => {
+        const resend = getResendClient();
+        return resend.emails.send({
+          from: process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev",
+          to: "advice@workwifepod.com",
+          subject: `New Submission from ${displayName}`,
+          html: `
+            <h2>New Work Wife Pod Submission</h2>
+            <table style="border-collapse: collapse; width: 100%; max-width: 600px;">
+              <tr><td style="padding: 8px; font-weight: bold; border-bottom: 1px solid #eee;">Name</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${firstName} ${lastName}</td></tr>
+              <tr><td style="padding: 8px; font-weight: bold; border-bottom: 1px solid #eee;">Email</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${email}</td></tr>
+              <tr><td style="padding: 8px; font-weight: bold; border-bottom: 1px solid #eee;">Phone</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${phone || "—"}</td></tr>
+              <tr><td style="padding: 8px; font-weight: bold; border-bottom: 1px solid #eee;">Age</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${age || "—"}</td></tr>
+              <tr><td style="padding: 8px; font-weight: bold; border-bottom: 1px solid #eee;">Gender</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${gender || "—"}</td></tr>
+              <tr><td style="padding: 8px; font-weight: bold; border-bottom: 1px solid #eee;">Industry</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${displayIndustry || "—"}</td></tr>
+            </table>
+            <h3 style="margin-top: 24px;">Question</h3>
+            <p style="background: #f9f9f9; padding: 16px; border-radius: 8px; white-space: pre-wrap;">${question}</p>
+          `,
+        });
+      })(),
 
       // B. Append row to Google Sheet
       (async () => {
