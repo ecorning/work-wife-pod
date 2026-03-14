@@ -26,3 +26,17 @@ body {
 .font-display {
   font-family: var(--font-bowlby), Arial, sans-serif;
 }
+
+/* Vertical conveyor belt — scrolls downward, loops seamlessly */
+@keyframes conveyor-down {
+  0% {
+    transform: translateY(-50%);
+  }
+  100% {
+    transform: translateY(0%);
+  }
+}
+
+.animate-conveyor-down {
+  animation: conveyor-down 60s linear infinite;
+}
