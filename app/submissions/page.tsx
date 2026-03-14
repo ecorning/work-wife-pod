@@ -28,7 +28,7 @@ const AGE_RANGES = [
   "60+",
 ];
 
-const GENDER_OPTIONS = ["Woman", "Man", "Non-Binary", "Prefer not to say"];
+const GENDER_OPTIONS = ["Female", "Male", "Non-Binary", "Prefer not to say"];
 
 const INDUSTRY_OPTIONS = [
   "Academia",
@@ -433,7 +433,7 @@ export default function Submissions() {
                   THANK YOU!
                 </h2>
                 <p className="mt-4 text-lg text-gray-600">
-                  Your question has been submitted. We&apos;ll be in touch!
+                  We have received your question and hope we can help.
                 </p>
               </div>
             )}

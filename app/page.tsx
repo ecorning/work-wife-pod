@@ -20,15 +20,15 @@ export default function Home() {
       </section>
 
       {/* Section 3: Topics conveyor belt on white */}
-      <section className="relative min-h-screen overflow-hidden bg-white">
+      <section className="relative h-screen overflow-hidden bg-white">
         {/* Top & bottom fade masks */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-24 bg-gradient-to-b from-white to-transparent" />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-24 bg-gradient-to-t from-white to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-32 bg-gradient-to-b from-white to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-32 bg-gradient-to-t from-white to-transparent" />
 
-        <div className="flex h-screen items-center justify-center">
+        <div className="absolute inset-x-0 top-0 flex justify-center">
           <div className="animate-conveyor-down flex flex-col items-center gap-2 text-center md:gap-3">
-            {/* Duplicate the list twice so the animation loops seamlessly */}
-            {[...Array(2)].map((_, i) => (
+            {/* Repeat list 6× so content always fills the viewport */}
+            {[...Array(6)].map((_, i) => (
               <div key={i} className="flex flex-col items-center gap-2 md:gap-3">
                 {[
                   "BAD BOSS?",

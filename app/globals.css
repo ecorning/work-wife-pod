@@ -38,5 +38,5 @@ body {
 }
 
 .animate-conveyor-down {
-  animation: conveyor-down 20s linear infinite;
+  animation: conveyor-down 60s linear infinite;
 }
