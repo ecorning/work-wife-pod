@@ -77,7 +77,8 @@ export default function Submissions() {
   const textareaRef = useRef<HTMLDivElement>(null);
 
   const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  const isFormValid = isEmailValid && consentChecked;
+  const hasAge = ageMode === "exact" ? exactAge !== "" : ageRange !== "";
+  const isFormValid = isEmailValid && consentChecked && gender !== "" && industry !== "" && hasAge;
 
   const handleWriteToUs = () => {
     setShowTextBox(true);
@@ -213,7 +214,7 @@ export default function Submissions() {
               {/* Age */}
               <div>
                 <label className="font-display mb-2 block text-sm tracking-wide text-ww-blue">
-                  AGE
+                  AGE <span className="text-ww-orange">*</span>
                 </label>
                 {ageMode === "exact" ? (
                   <div className="relative">
@@ -272,7 +273,7 @@ export default function Submissions() {
               {/* Industry */}
               <div>
                 <label className="font-display mb-2 block text-sm tracking-wide text-ww-blue">
-                  INDUSTRY
+                  INDUSTRY <span className="text-ww-orange">*</span>
                 </label>
                 <select
                   value={industry}
@@ -295,7 +296,7 @@ export default function Submissions() {
               {/* Gender */}
               <div>
                 <label className="font-display mb-2 block text-sm tracking-wide text-ww-blue">
-                  GENDER
+                  GENDER <span className="text-ww-orange">*</span>
                 </label>
                 <select
                   value={gender}
@@ -433,7 +434,7 @@ export default function Submissions() {
                   THANK YOU!
                 </h2>
                 <p className="mt-4 text-lg text-gray-600">
-                  We have received your question and hope we can help.
+                  We have received your question and hope we can help
                 </p>
               </div>
             )}
