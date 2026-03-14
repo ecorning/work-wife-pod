@@ -76,7 +76,7 @@ export async function POST(request: Request) {
             const hh = String(now.getHours()).padStart(2, "0");
             const min = String(now.getMinutes()).padStart(2, "0");
             const lastInit = lastName ? ` ${lastName.charAt(0)}.` : "";
-            return `WW Submission - ${firstName || "Anonymous"}${lastInit} - ${dd}/${mm}/${yy} ${hh}:${min}`;
+            return `WW Submission - ${firstName || "Anonymous"}${lastInit} - ${mm}/${dd}/${yy} ${hh}:${min}`;
           })(),
           html: `
             <h2>New Work Wife Pod Submission</h2>
