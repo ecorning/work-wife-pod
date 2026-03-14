@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 const collageImages = [
   { src: "/images/collage/typewriter-red.jpg", alt: "Red Olivetti Valentine typewriter", width: 2000, height: 2000 },
@@ -68,9 +68,54 @@ export default function Submissions() {
   const [exactAge, setExactAge] = useState("");
   const [ageRange, setAgeRange] = useState("");
   const [consentChecked, setConsentChecked] = useState(false);
+  const [showTextBox, setShowTextBox] = useState(false);
+  const [question, setQuestion] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<
+    "idle" | "success" | "error"
+  >("idle");
+  const textareaRef = useRef<HTMLDivElement>(null);
 
   const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const isFormValid = isEmailValid && consentChecked;
+
+  const handleWriteToUs = () => {
+    setShowTextBox(true);
+    setTimeout(() => {
+      textareaRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 100);
+  };
+
+  const handleSubmit = async () => {
+    if (!isFormValid || !question.trim()) return;
+    setIsSubmitting(true);
+    setSubmitStatus("idle");
+
+    try {
+      const res = await fetch("/api/submissions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          email,
+          phone,
+          age: ageMode === "exact" ? exactAge : ageRange,
+          gender,
+          industry,
+          industryOther,
+          question,
+        }),
+      });
+
+      if (!res.ok) throw new Error("Submission failed");
+      setSubmitStatus("success");
+    } catch {
+      setSubmitStatus("error");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <>
@@ -321,30 +366,77 @@ export default function Submissions() {
             </div>
 
             {/* Action buttons */}
-            <div className="flex flex-col gap-4 pt-4 md:flex-row md:gap-6">
-              <button
-                type="button"
-                disabled={!isFormValid}
-                className={`font-display flex-1 rounded-md px-8 py-4 text-lg text-white transition-all md:text-xl ${
-                  isFormValid
-                    ? "bg-ww-orange hover:opacity-90 active:scale-[0.98]"
-                    : "cursor-not-allowed bg-ww-orange opacity-40"
-                }`}
-              >
-                WRITE TO US
-              </button>
-              <button
-                type="button"
-                disabled={!isFormValid}
-                className={`font-display flex-1 rounded-md px-8 py-4 text-lg text-white transition-all md:text-xl ${
-                  isFormValid
-                    ? "bg-ww-blue hover:opacity-90 active:scale-[0.98]"
-                    : "cursor-not-allowed bg-ww-blue opacity-40"
-                }`}
-              >
-                RECORD A VOICE MEMO
-              </button>
-            </div>
+            {submitStatus !== "success" && (
+              <div className="flex flex-col gap-4 pt-4 md:flex-row md:gap-6">
+                <button
+                  type="button"
+                  disabled={!isFormValid || showTextBox}
+                  onClick={handleWriteToUs}
+                  className={`font-display flex-1 rounded-md px-8 py-4 text-lg text-white transition-all md:text-xl ${
+                    isFormValid && !showTextBox
+                      ? "bg-ww-orange hover:opacity-90 active:scale-[0.98]"
+                      : "cursor-not-allowed bg-ww-orange opacity-40"
+                  }`}
+                >
+                  WRITE TO US
+                </button>
+                <button
+                  type="button"
+                  disabled
+                  className="font-display flex-1 cursor-not-allowed rounded-md bg-ww-blue px-8 py-4 text-white opacity-40 transition-all"
+                >
+                  <span className="text-lg md:text-xl">RECORD A VOICE MEMO</span>
+                  <span className="mt-1 block text-xs font-normal tracking-wide">
+                    (COMING SOON)
+                  </span>
+                </button>
+              </div>
+            )}
+
+            {/* Question textarea — appears after clicking Write to Us */}
+            {showTextBox && submitStatus !== "success" && (
+              <div ref={textareaRef} className="space-y-4 pt-2">
+                <label className="font-display mb-2 block text-sm tracking-wide text-ww-blue">
+                  YOUR QUESTION <span className="text-ww-orange">*</span>
+                </label>
+                <textarea
+                  value={question}
+                  onChange={(e) => setQuestion(e.target.value)}
+                  rows={6}
+                  className="w-full rounded-md border border-gray-300 px-4 py-3 text-base transition-colors focus:border-ww-blue focus:outline-none focus:ring-1 focus:ring-ww-blue"
+                  placeholder="Tell us what's going on at work..."
+                />
+                <button
+                  type="button"
+                  disabled={!question.trim() || isSubmitting}
+                  onClick={handleSubmit}
+                  className={`font-display w-full rounded-md px-8 py-4 text-lg text-white transition-all md:text-xl ${
+                    question.trim() && !isSubmitting
+                      ? "bg-ww-orange hover:opacity-90 active:scale-[0.98]"
+                      : "cursor-not-allowed bg-ww-orange opacity-40"
+                  }`}
+                >
+                  {isSubmitting ? "SUBMITTING..." : "SUBMIT"}
+                </button>
+                {submitStatus === "error" && (
+                  <p className="text-center text-sm text-red-500">
+                    Something went wrong. Please try again.
+                  </p>
+                )}
+              </div>
+            )}
+
+            {/* Success message */}
+            {submitStatus === "success" && (
+              <div className="py-12 text-center">
+                <h2 className="font-display text-3xl text-ww-blue md:text-4xl">
+                  THANK YOU!
+                </h2>
+                <p className="mt-4 text-lg text-gray-600">
+                  Your question has been submitted. We&apos;ll be in touch!
+                </p>
+              </div>
+            )}
           </form>
         </div>
       </section>
