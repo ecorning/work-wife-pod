@@ -70,6 +70,19 @@ export default function Home() {
           IF YOU HAVE 99 PROBLEMS, WORK IS PROBABLY ONE
         </h2>
       </section>
+
+      {/* Section 6: Coming Soon banner */}
+      <section className="flex flex-col items-center justify-center bg-ww-blue px-6 py-8 md:py-10">
+        <h2 className="font-display text-lg text-white md:text-[2.5vw]">
+          COMING SOON
+        </h2>
+        <Link
+          href="/coming-soon"
+          className="font-display mt-2 text-lg text-white underline decoration-1 underline-offset-4 hover:opacity-80 md:text-[2.5vw]"
+        >
+          Sign up to get notified about the podcast launch
+        </Link>
+      </section>
     </>
   );
 }
