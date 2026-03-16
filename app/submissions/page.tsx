@@ -7,7 +7,6 @@ const collageImages = [
   { src: "/images/collage/typewriter-red.jpg", alt: "Red Olivetti Valentine typewriter", width: 2000, height: 2000 },
   { src: "/images/collage/tape-dispenser.jpg", alt: "Orange tape dispenser", width: 500, height: 500 },
   { src: "/images/collage/typewriter-yellow.jpg", alt: "Yellow Olivetti Lettera typewriter", width: 430, height: 645 },
-  { src: "/images/collage/typewriter-ibm.jpg", alt: "IBM typewriter", width: 470, height: 665 },
   { src: "/images/collage/camera-orange.jpg", alt: "Orange camera close-up", width: 817, height: 1300 },
   { src: "/images/collage/phone-nokia.jpg", alt: "Retro Nokia phone", width: 1080, height: 1350 },
   { src: "/images/collage/calendar-red.jpg", alt: "Red retro desk calendar", width: 1080, height: 1350 },
@@ -68,6 +67,9 @@ export default function Submissions() {
   const [consentChecked, setConsentChecked] = useState(false);
   const [showTextBox, setShowTextBox] = useState(false);
   const [question, setQuestion] = useState("");
+  const [callInOpen, setCallInOpen] = useState(false);
+  const [callInEmail, setCallInEmail] = useState("");
+  const [callInPhone, setCallInPhone] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<
     "idle" | "success" | "error"
@@ -102,6 +104,9 @@ export default function Submissions() {
           industry,
           industryOther,
           question,
+          callIn: callInOpen,
+          callInEmail: callInOpen ? callInEmail : "",
+          callInPhone: callInOpen ? callInPhone : "",
         }),
       });
 
@@ -378,12 +383,93 @@ export default function Submissions() {
                   className="w-full rounded-md border border-gray-300 px-4 py-3 text-base transition-colors focus:border-ww-blue focus:outline-none focus:ring-1 focus:ring-ww-blue"
                   placeholder="Tell us what's going on at work..."
                 />
+                {/* Call-in checkbox */}
+                <div>
+                  <label className="flex cursor-pointer items-start gap-3">
+                    <span
+                      className={`mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded border-2 transition-colors ${
+                        callInOpen
+                          ? "border-ww-orange bg-ww-orange"
+                          : "border-gray-300"
+                      }`}
+                    >
+                      {callInOpen && (
+                        <svg
+                          className="h-3 w-3 text-white"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth={3}
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                      )}
+                    </span>
+                    <input
+                      type="checkbox"
+                      checked={callInOpen}
+                      onChange={(e) => {
+                        setCallInOpen(e.target.checked);
+                        if (!e.target.checked) {
+                          setCallInEmail("");
+                          setCallInPhone("");
+                        }
+                      }}
+                      className="sr-only"
+                    />
+                    <span className="text-sm leading-relaxed text-gray-600">
+                      I am open to potentially calling into the Work Wife podcast and discussing my question with the hosts (voices can be anonymized)
+                    </span>
+                  </label>
+
+                  {/* Conditional contact fields — skip email if already provided above */}
+                  {callInOpen && (
+                    <div className="mt-4 grid grid-cols-1 gap-4 pl-8 md:grid-cols-2">
+                      {!email.trim() && (
+                        <div>
+                          <label className="font-display mb-2 block text-sm tracking-wide text-ww-blue">
+                            EMAIL
+                          </label>
+                          <input
+                            type="email"
+                            value={callInEmail}
+                            onChange={(e) => setCallInEmail(e.target.value)}
+                            className="w-full rounded-md border border-gray-300 px-4 py-3 text-base transition-colors focus:border-ww-blue focus:outline-none focus:ring-1 focus:ring-ww-blue"
+                            placeholder="jane@example.com"
+                          />
+                        </div>
+                      )}
+                      <div>
+                        <label className="font-display mb-2 block text-sm tracking-wide text-ww-blue">
+                          PHONE NUMBER
+                        </label>
+                        <input
+                          type="tel"
+                          value={callInPhone}
+                          onChange={(e) => setCallInPhone(e.target.value)}
+                          className="w-full rounded-md border border-gray-300 px-4 py-3 text-base transition-colors focus:border-ww-blue focus:outline-none focus:ring-1 focus:ring-ww-blue"
+                          placeholder="(555) 123-4567"
+                        />
+                      </div>
+                      {!email.trim() && !callInEmail.trim() && !callInPhone.trim() && (
+                        <p className="text-sm text-gray-400 md:col-span-2">
+                          Please provide at least an email or phone number
+                        </p>
+                      )}
+                    </div>
+                  )}
+                </div>
+
                 <button
                   type="button"
-                  disabled={!question.trim() || isSubmitting}
+                  disabled={!question.trim() || isSubmitting || (callInOpen && !email.trim() && !callInEmail.trim() && !callInPhone.trim())}
                   onClick={handleSubmit}
                   className={`font-display w-full rounded-md px-8 py-4 text-lg text-white transition-all md:text-xl ${
-                    question.trim() && !isSubmitting
+                    question.trim() && !isSubmitting && !(callInOpen && !email.trim() && !callInEmail.trim() && !callInPhone.trim())
                       ? "bg-ww-orange hover:opacity-90 active:scale-[0.98]"
                       : "cursor-not-allowed bg-ww-orange opacity-40"
                   }`}
