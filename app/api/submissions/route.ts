@@ -1,6 +1,48 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { google } from "googleapis";
+import Anthropic from "@anthropic-ai/sdk";
+
+const CATEGORIES = [
+  "Workplace Conflict",
+  "Workplace Etiquette",
+  "Work Life Balance",
+  "Job Search / Interviewing",
+  "Relationships at Work",
+  "Management/Leadership",
+  "Sexual Harassment",
+  "Compensation & Negotiation",
+  "Other",
+] as const;
+
+async function categorizeQuestion(question: string): Promise<string> {
+  try {
+    if (!process.env.ANTHROPIC_API_KEY) return "Other";
+    const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+    const message = await client.messages.create({
+      model: "claude-haiku-4-5-20251001",
+      max_tokens: 50,
+      messages: [
+        {
+          role: "user",
+          content: `Categorize the following question into exactly one of these categories: ${CATEGORIES.join(", ")}
+
+Question: "${question}"
+
+Respond with only the category name, nothing else.`,
+        },
+      ],
+    });
+    const category =
+      message.content[0].type === "text" ? message.content[0].text.trim() : "Other";
+    return CATEGORIES.includes(category as (typeof CATEGORIES)[number])
+      ? category
+      : "Other";
+  } catch (error) {
+    console.error("Categorization failed:", error);
+    return "Other";
+  }
+}
 
 function getResendClient() {
   return new Resend(process.env.RESEND_API_KEY);
@@ -58,6 +100,9 @@ export async function POST(request: Request) {
     const displayName = firstName || "Anonymous";
     const timestamp = new Date().toISOString();
 
+    // Categorize the question using AI
+    const category = await categorizeQuestion(question);
+
     // Run email and sheets in parallel
     const results = await Promise.allSettled([
       // A. Send email via Resend (wrapped in async so constructor errors are caught)
@@ -84,6 +129,7 @@ export async function POST(request: Request) {
               <tr><td style="padding: 8px; font-weight: bold; border-bottom: 1px solid #eee;">Age</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${age || "—"}</td></tr>
               <tr><td style="padding: 8px; font-weight: bold; border-bottom: 1px solid #eee;">Gender</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${gender || "—"}</td></tr>
               <tr><td style="padding: 8px; font-weight: bold; border-bottom: 1px solid #eee;">Industry</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${displayIndustry || "—"}</td></tr>
+              <tr><td style="padding: 8px; font-weight: bold; border-bottom: 1px solid #eee;">Category</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${category}</td></tr>
             </table>
             <h3 style="margin-top: 24px;">Question</h3>
             <p style="background: #f9f9f9; padding: 16px; border-radius: 8px; white-space: pre-wrap;">${question}</p>
@@ -110,6 +156,7 @@ export async function POST(request: Request) {
                 gender,
                 email,
                 question,
+                category,
               ],
             ],
           },
