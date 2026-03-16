@@ -150,8 +150,10 @@ export default function ComingSoon() {
               <p className="mt-4 text-lg text-gray-600">
                 We&apos;ll let you know as soon as the podcast launches
               </p>
-              <p className="mt-6 text-base text-gray-600">
-                In the meantime, if you have a work related question or dilemma you would like advice on, please{" "}
+              <p className="mt-6 text-lg text-gray-600">
+                In the meantime, if you have a work related question or dilemma
+                <br />
+                you would like advice on, please{" "}
                 <a
                   href="/submissions"
                   className="font-medium text-ww-orange underline decoration-1 underline-offset-2 hover:opacity-80"
