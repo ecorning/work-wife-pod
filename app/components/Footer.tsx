@@ -30,7 +30,9 @@ export default function Footer() {
           {/* Social Links (right) */}
           <div className="flex items-center gap-5">
             <a
-              href="#"
+              href="https://instagram.com/work.wife.pod"
+              target="_blank"
+              rel="noopener noreferrer"
               aria-label="Instagram"
               className="transition-opacity hover:opacity-80"
             >
@@ -44,7 +46,9 @@ export default function Footer() {
               </svg>
             </a>
             <a
-              href="#"
+              href="https://tiktok.com/@work.wife.pod"
+              target="_blank"
+              rel="noopener noreferrer"
               aria-label="TikTok"
               className="transition-opacity hover:opacity-80"
             >

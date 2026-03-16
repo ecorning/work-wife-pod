@@ -144,7 +144,7 @@ export default function About() {
 
       {/* Section 3: Contact — single line, reduced height and font */}
       <section className="flex items-center justify-center bg-white px-6 pt-6 pb-20 md:pt-8 md:pb-28">
-        <h2 className="text-center text-base font-normal text-ww-orange">
+        <h2 className="font-display text-center text-sm text-ww-orange">
           BUSINESS &amp; TEAM INQUIRIES:{" "}
           <a
             href="mailto:contact@workwifepod.com"
