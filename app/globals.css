@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
 :root {
+  --orange: #FF5500;
+  --blue: #6ABFF6;
   --background: #ffffff;
   --foreground: #171717;
 }
@@ -8,8 +10,15 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-ww-orange: var(--orange);
+  --color-ww-blue: var(--blue);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-bowlby);
+}
+
+.font-display {
+  font-family: var(--font-bowlby), Arial, sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
