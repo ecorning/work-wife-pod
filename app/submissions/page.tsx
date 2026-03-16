@@ -59,8 +59,6 @@ export default function Submissions() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-  const [emailTouched, setEmailTouched] = useState(false);
-  const [phone, setPhone] = useState("");
   const [gender, setGender] = useState("");
   const [industry, setIndustry] = useState("");
   const [industryOther, setIndustryOther] = useState("");
@@ -76,9 +74,8 @@ export default function Submissions() {
   >("idle");
   const textareaRef = useRef<HTMLDivElement>(null);
 
-  const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const hasAge = ageMode === "exact" ? exactAge !== "" : ageRange !== "";
-  const isFormValid = isEmailValid && consentChecked && gender !== "" && industry !== "" && hasAge;
+  const isFormValid = firstName.trim() !== "" && lastName.trim() !== "" && consentChecked && gender !== "" && industry !== "" && hasAge;
 
   const handleWriteToUs = () => {
     setShowTextBox(true);
@@ -100,7 +97,6 @@ export default function Submissions() {
           firstName,
           lastName,
           email,
-          phone,
           age: ageMode === "exact" ? exactAge : ageRange,
           gender,
           industry,
@@ -121,18 +117,16 @@ export default function Submissions() {
   return (
     <>
       {/* Section 1: Instructions */}
-      <section className="bg-white px-6 py-16 md:py-24">
-        <div className="mx-auto max-w-4xl text-center">
-          <h1 className="font-display text-3xl leading-tight text-ww-blue md:text-4xl lg:text-5xl">
-            FILL OUT THE FORM BELOW
-            <br />
-            TO SUBMIT YOUR QUESTION
-          </h1>
-        </div>
+      <section className="flex items-center justify-center bg-ww-blue px-6 py-14 md:py-20">
+        <h1 className="font-display text-center text-3xl leading-tight text-white md:text-4xl lg:text-5xl">
+          FILL OUT THE FORM BELOW
+          <br />
+          TO SUBMIT YOUR QUESTION
+        </h1>
       </section>
 
       {/* Section 2: Submission form */}
-      <section className="bg-white px-6 pb-16">
+      <section className="bg-white px-6 pt-10 pb-16">
         <div className="mx-auto max-w-2xl">
           <form
             onSubmit={(e) => e.preventDefault()}
@@ -143,7 +137,7 @@ export default function Submissions() {
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               <div>
                 <label className="font-display mb-2 block text-sm tracking-wide text-ww-blue">
-                  FIRST NAME
+                  FIRST NAME <span className="text-ww-orange">*</span>
                 </label>
                 <input
                   type="text"
@@ -155,7 +149,7 @@ export default function Submissions() {
               </div>
               <div>
                 <label className="font-display mb-2 block text-sm tracking-wide text-ww-blue">
-                  LAST NAME
+                  LAST NAME OR LAST INITIAL <span className="text-ww-orange">*</span>
                 </label>
                 <input
                   type="text"
@@ -170,42 +164,14 @@ export default function Submissions() {
             {/* Email */}
             <div>
               <label className="font-display mb-2 block text-sm tracking-wide text-ww-blue">
-                EMAIL <span className="text-ww-orange">*</span>
+                EMAIL
               </label>
               <input
                 type="email"
-                required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                onBlur={() => setEmailTouched(true)}
-                className={`w-full rounded-md border px-4 py-3 text-base transition-colors focus:outline-none focus:ring-1 ${
-                  emailTouched && !isEmailValid
-                    ? "border-red-400 focus:border-red-400 focus:ring-red-400"
-                    : "border-gray-300 focus:border-ww-blue focus:ring-ww-blue"
-                }`}
-                placeholder="jane@example.com"
-              />
-              {emailTouched && !isEmailValid && (
-                <p className="mt-1.5 text-sm text-red-500">
-                  Please enter a valid email address
-                </p>
-              )}
-            </div>
-
-            {/* Phone */}
-            <div>
-              <label className="font-display mb-2 block text-sm tracking-wide text-ww-blue">
-                PHONE NUMBER{" "}
-                <span className="font-sans text-xs font-normal text-gray-400">
-                  (OPTIONAL)
-                </span>
-              </label>
-              <input
-                type="tel"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
                 className="w-full rounded-md border border-gray-300 px-4 py-3 text-base transition-colors focus:border-ww-blue focus:outline-none focus:ring-1 focus:ring-ww-blue"
-                placeholder="(555) 123-4567"
+                placeholder="jane@example.com"
               />
             </div>
 
@@ -358,10 +324,15 @@ export default function Submissions() {
                   onChange={(e) => setConsentChecked(e.target.checked)}
                   className="sr-only"
                 />
-                <span className="text-sm leading-relaxed text-gray-600">
-                  I understand that my submission should not include any directly
-                  identifying information about other individuals and that my
-                  submission may be edited to respect anonymity
+                <span>
+                  <span className="text-sm leading-relaxed text-gray-600">
+                    By clicking here you consent to us sharing (or paraphrasing) your question via Work Wife (required)
+                  </span>
+                  <span className="mt-2 block text-[11px] leading-tight text-gray-400">
+                    By clicking below, I acknowledge that I am voluntarily providing my consent and release to Work Wife, its members, officers, directors, employees, contractors and assigns to use any and all details from this submission for any purpose, including, but not limited to, the right to use such story for content for the Work Wife podcast and social media platforms, and to monetize and exploit such content commercially.
+                    {" "}
+                    I hereby release and hold harmless Work Wife, its members, officers, directors, employees, contractors and assigns against all claims, damages or expenses of whatever form or nature, including attorneys&apos; fees and other costs of legal defense, whether direct or indirect, that they may sustain or incur as a result of the use of this content and release any claims by or on behalf of myself and my heirs for any damages or reimbursement for use of the content.
+                  </span>
                 </span>
               </label>
             </div>
