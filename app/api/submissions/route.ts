@@ -46,9 +46,9 @@ export async function POST(request: Request) {
     } = body;
 
     // Basic validation
-    if (!email || !question) {
+    if (!question) {
       return NextResponse.json(
-        { error: "Email and question are required" },
+        { error: "Question is required" },
         { status: 400 }
       );
     }
