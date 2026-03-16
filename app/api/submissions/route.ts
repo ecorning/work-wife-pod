@@ -24,7 +24,6 @@ interface SubmissionBody {
   firstName: string;
   lastName: string;
   email: string;
-  phone: string;
   age: string;
   gender: string;
   industry: string;
@@ -39,7 +38,6 @@ export async function POST(request: Request) {
       firstName,
       lastName,
       email,
-      phone,
       age,
       gender,
       industry,
@@ -83,7 +81,6 @@ export async function POST(request: Request) {
             <table style="border-collapse: collapse; width: 100%; max-width: 600px;">
               <tr><td style="padding: 8px; font-weight: bold; border-bottom: 1px solid #eee;">Name</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${firstName} ${lastName}</td></tr>
               <tr><td style="padding: 8px; font-weight: bold; border-bottom: 1px solid #eee;">Email</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${email}</td></tr>
-              <tr><td style="padding: 8px; font-weight: bold; border-bottom: 1px solid #eee;">Phone</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${phone || "—"}</td></tr>
               <tr><td style="padding: 8px; font-weight: bold; border-bottom: 1px solid #eee;">Age</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${age || "—"}</td></tr>
               <tr><td style="padding: 8px; font-weight: bold; border-bottom: 1px solid #eee;">Gender</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${gender || "—"}</td></tr>
               <tr><td style="padding: 8px; font-weight: bold; border-bottom: 1px solid #eee;">Industry</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${displayIndustry || "—"}</td></tr>
@@ -100,7 +97,7 @@ export async function POST(request: Request) {
         const sheets = getGoogleSheetsClient();
         await sheets.spreadsheets.values.append({
           spreadsheetId: process.env.GOOGLE_SHEETS_SPREADSHEET_ID,
-          range: "Sheet1!A:I",
+          range: "Sheet1!A:H",
           valueInputOption: "USER_ENTERED",
           requestBody: {
             values: [
@@ -108,11 +105,10 @@ export async function POST(request: Request) {
                 timestamp,
                 firstName,
                 lastName,
-                email,
-                phone,
                 age,
-                gender,
                 displayIndustry,
+                gender,
+                email,
                 question,
               ],
             ],
