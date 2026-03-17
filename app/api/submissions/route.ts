@@ -152,21 +152,15 @@ export async function POST(request: Request) {
         const sheets = getGoogleSheetsClient();
         await sheets.spreadsheets.values.append({
           spreadsheetId: process.env.GOOGLE_SHEETS_SPREADSHEET_ID,
-          range: "Submissions!A:J",
+          range: "Waitlist!A:D",
           valueInputOption: "USER_ENTERED",
           requestBody: {
             values: [
               [
-                timestamp,                                         // A: Timestamp
-                firstName,                                         // B: First Name
-                lastName,                                          // C: Last Name/Last Initial
-                age,                                               // D: Age/Age Range
-                displayIndustry,                                   // E: Industry
-                gender,                                            // F: Gender
-                question,                                          // G: Question
-                email || callInEmail || "",                         // H: Email (from either field)
-                callIn ? (callInPhone || "") : "",                  // I: Phone Number
-                callIn ? "Yes" : "No",                             // J: Call In
+                timestamp,
+                firstName,
+                lastName,
+                email,
               ],
             ],
           },
