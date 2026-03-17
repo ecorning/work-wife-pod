@@ -20,14 +20,15 @@ export default function Footer() {
             >
               ABOUT US
             </Link>
+            <Link
+              href="/coming-soon"
+              className="font-display text-sm transition-opacity hover:opacity-80"
+            >
+              WAITLIST
+            </Link>
           </div>
 
-          {/* Branding (absolutely centered) */}
-          <p className="font-display text-2xl md:absolute md:left-1/2 md:-translate-x-1/2">
-            WORK WIFE POD
-          </p>
-
-          {/* Social Links (right) */}
+{/* Social Links (right) */}
           <div className="flex items-center gap-5">
             <a
               href="https://instagram.com/work.wife.pod"

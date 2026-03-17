@@ -72,16 +72,17 @@ export default function Home() {
       </section>
 
       {/* Section 6: Coming Soon banner */}
-      <section className="flex flex-col items-center justify-center bg-ww-blue px-6 py-8 md:py-10">
-        <h2 className="font-display text-lg text-white md:text-[2.5vw]">
-          COMING SOON
+      <section className="flex items-center justify-center bg-ww-blue px-6 py-8 md:py-10">
+        <h2 className="font-display text-lg italic text-white md:text-[2.5vw]">
+          COMING SOON!
+          {" "}
+          <Link
+            href="/coming-soon"
+            className="underline decoration-1 underline-offset-4 hover:opacity-80"
+          >
+            SIGN UP TO BE NOTIFIED
+          </Link>
         </h2>
-        <Link
-          href="/coming-soon"
-          className="font-display mt-2 text-lg text-white underline decoration-1 underline-offset-4 hover:opacity-80 md:text-[2.5vw]"
-        >
-          Sign up to get notified about the podcast launch
-        </Link>
       </section>
     </>
   );
