@@ -71,6 +71,9 @@ interface SubmissionBody {
   industry: string;
   industryOther: string;
   question: string;
+  callIn?: boolean;
+  callInEmail?: string;
+  callInPhone?: string;
 }
 
 export async function POST(request: Request) {
@@ -85,6 +88,9 @@ export async function POST(request: Request) {
       industry,
       industryOther,
       question,
+      callIn,
+      callInEmail,
+      callInPhone,
     } = body;
 
     // Basic validation
@@ -130,6 +136,9 @@ export async function POST(request: Request) {
               <tr><td style="padding: 8px; font-weight: bold; border-bottom: 1px solid #eee;">Gender</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${gender || "—"}</td></tr>
               <tr><td style="padding: 8px; font-weight: bold; border-bottom: 1px solid #eee;">Industry</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${displayIndustry || "—"}</td></tr>
               <tr><td style="padding: 8px; font-weight: bold; border-bottom: 1px solid #eee;">Category</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${category}</td></tr>
+              <tr><td style="padding: 8px; font-weight: bold; border-bottom: 1px solid #eee;">Open to Call-In</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${callIn ? "Yes" : "No"}</td></tr>
+              ${callIn ? `<tr><td style="padding: 8px; font-weight: bold; border-bottom: 1px solid #eee;">Call-In Email</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${callInEmail || email || "—"}</td></tr>
+              <tr><td style="padding: 8px; font-weight: bold; border-bottom: 1px solid #eee;">Call-In Phone</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${callInPhone || "—"}</td></tr>` : ""}
             </table>
             <h3 style="margin-top: 24px;">Question</h3>
             <p style="background: #f9f9f9; padding: 16px; border-radius: 8px; white-space: pre-wrap;">${question}</p>
@@ -143,20 +152,21 @@ export async function POST(request: Request) {
         const sheets = getGoogleSheetsClient();
         await sheets.spreadsheets.values.append({
           spreadsheetId: process.env.GOOGLE_SHEETS_SPREADSHEET_ID,
-          range: "Sheet1!A:H",
+          range: "Submissions!A:J",
           valueInputOption: "USER_ENTERED",
           requestBody: {
             values: [
               [
-                timestamp,
-                firstName,
-                lastName,
-                age,
-                displayIndustry,
-                gender,
-                email,
-                question,
-                category,
+                timestamp,                                         // A: Timestamp
+                firstName,                                         // B: First Name
+                lastName,                                          // C: Last Name/Last Initial
+                age,                                               // D: Age/Age Range
+                displayIndustry,                                   // E: Industry
+                gender,                                            // F: Gender
+                question,                                          // G: Question
+                email || callInEmail || "",                         // H: Email (from either field)
+                callIn ? (callInPhone || "") : "",                  // I: Phone Number
+                callIn ? "Yes" : "No",                             // J: Call In
               ],
             ],
           },
