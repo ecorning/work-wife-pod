@@ -40,8 +40,8 @@ export default function About() {
             {/* Friends group */}
             <div className="flex flex-col items-center gap-6">
               <Image
-                src="/images/hosts/friends headshot.png"
-                alt="Friends — cartoon portrait"
+                src="/images/hosts/experts headshot.png"
+                alt="Experts — cartoon portrait"
                 width={1024}
                 height={1024}
                 className="h-auto w-56"
@@ -87,8 +87,8 @@ export default function About() {
             {/* Row 2, Left: Friends image */}
             <div className="flex items-center justify-center">
               <Image
-                src="/images/hosts/friends headshot.png"
-                alt="Friends — cartoon portrait"
+                src="/images/hosts/experts headshot.png"
+                alt="Experts — cartoon portrait"
                 width={1024}
                 height={1024}
                 className="h-auto w-64 lg:w-80"
