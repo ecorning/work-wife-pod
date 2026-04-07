@@ -4,16 +4,11 @@ import Image from "next/image";
 import { useRef, useState } from "react";
 
 const collageImages = [
-  { src: "/images/collage/typewriter-red.jpg", alt: "Red Olivetti Valentine typewriter", width: 2000, height: 2000 },
-  { src: "/images/collage/tape-dispenser.jpg", alt: "Orange tape dispenser", width: 500, height: 500 },
-  { src: "/images/collage/typewriter-yellow.jpg", alt: "Yellow Olivetti Lettera typewriter", width: 430, height: 645 },
-  { src: "/images/collage/camera-orange.jpg", alt: "Orange camera close-up", width: 817, height: 1300 },
-  { src: "/images/collage/phone-nokia.jpg", alt: "Retro Nokia phone", width: 1080, height: 1350 },
-  { src: "/images/collage/calendar-red.jpg", alt: "Red retro desk calendar", width: 1080, height: 1350 },
-  { src: "/images/collage/tape-holder-red.jpg", alt: "Red tape holder", width: 1080, height: 1350 },
-  { src: "/images/collage/calendar-silver.jpg", alt: "Silver desk calendar", width: 1170, height: 1187 },
-  { src: "/images/collage/clock-digital.jpg", alt: "Retro digital clock", width: 1080, height: 1350 },
-  { src: "/images/collage/computer-retro.jpg", alt: "Retro Macintosh computer", width: 538, height: 542 },
+  { src: "/images/collage/camera-orange.jpg", alt: "Orange phone camera close-up", className: "object-top" },
+  { src: "/images/collage/tape-holder-red.jpg", alt: "White out dispenser" },
+  { src: "/images/collage/phone-nokia.jpg", alt: "Retro Nokia phone" },
+  { src: "/images/collage/calendar-red.jpg", alt: "Red retro desk calendar" },
+  { src: "/images/collage/clock-digital.jpg", alt: "Retro digital clock" },
 ];
 
 const AGE_RANGES = [
@@ -499,18 +494,18 @@ export default function Submissions() {
         </div>
       </section>
 
-      {/* Section 3: Photo collage — sharp edges, tight grid matching PDF aesthetic */}
+      {/* Section 3: Photo row — 5 equal images in a single row */}
       <section className="bg-white px-6 pb-20">
         <div className="mx-auto max-w-7xl">
-          <div className="columns-3 gap-2 space-y-2 md:columns-4 lg:columns-5">
+          <div className="grid grid-cols-5 gap-3">
             {collageImages.map((img) => (
-              <div key={img.src} className="break-inside-avoid overflow-hidden">
+              <div key={img.src} className="aspect-square overflow-hidden">
                 <Image
                   src={img.src}
                   alt={img.alt}
-                  width={img.width}
-                  height={img.height}
-                  className="h-auto w-full object-cover"
+                  width={500}
+                  height={500}
+                  className={`h-full w-full object-cover ${img.className || ""}`}
                 />
               </div>
             ))}
