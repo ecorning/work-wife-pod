@@ -15,12 +15,6 @@ export default function Footer() {
               SUBMISSIONS
             </Link>
             <Link
-              href="/about"
-              className="font-display text-sm transition-opacity hover:opacity-80"
-            >
-              ABOUT US
-            </Link>
-            <Link
               href="/coming-soon"
               className="font-display text-sm transition-opacity hover:opacity-80"
             >

@@ -27,19 +27,13 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* Right: Waitlist + About Us */}
+        {/* Right: Waitlist */}
         <div className="flex items-center justify-end gap-6 pr-[8%]">
           <Link
             href="/coming-soon"
             className="font-display text-sm text-ww-orange transition-opacity hover:opacity-70"
           >
             WAITLIST
-          </Link>
-          <Link
-            href="/about"
-            className="font-display text-sm text-ww-orange transition-opacity hover:opacity-70"
-          >
-            ABOUT US
           </Link>
         </div>
       </div>
@@ -92,13 +86,6 @@ export default function Navbar() {
               onClick={() => setIsOpen(false)}
             >
               WAITLIST
-            </Link>
-            <Link
-              href="/about"
-              className="font-display text-sm text-ww-orange"
-              onClick={() => setIsOpen(false)}
-            >
-              ABOUT US
             </Link>
           </div>
         </div>

@@ -1,6 +1,11 @@
 import Image from "next/image";
+import { notFound } from "next/navigation";
 
 export default function About() {
+  // The About Us page is non-public for now. Remove this guard (and restore
+  // the nav links in Navbar.tsx / Footer.tsx) to make it public again.
+  notFound();
+
   return (
     <>
       {/* Section 1: HOSTED BY */}
